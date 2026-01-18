@@ -1,35 +1,99 @@
-name: Subscription Vending
+name: Subscription Vending & Provisioning
 
 on:
   pull_request:
     paths:
       - "requests/**.yaml"
+      - ".github/workflows/subscription-vending.yml"
+  push:
+    branches: [main]
+    paths:
+      - "requests/**.yaml"
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
 
 jobs:
   validate:
+    name: Validate Subscription Request
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Validate request
+      - name: Find changed requests
+        id: changed
         run: |
-          yq '.subscription_name' ${{ github.event.pull_request.changed_files }}
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            changed_files=$(git diff-name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep "requests/.*\.yaml" || true)
+          else
+            changed_files=$(git diff-name-only HEAD~1 HEAD | grep "requests/.*\.yaml" || true)
+          fi
+          
+          echo "changed_files<<EOF" >> $GITHUB_OUTPUT
+          echo "$changed_files" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Validate request format
+        run: |
+          if [ -z "${{ steps.changed.outputs.changed_files }}" ]; then
+            echo "No subscription requests found"
+            exit 0
+          fi
+          
+          for file in ${{ steps.changed.outputs.changed_files }}; do
+            if [ -f "$file" ]; then
+              echo "Validating $file..."
+              
+              # Check required fields
+              yq eval '.subscription_name' "$file" > /dev/null || { echo "Missing subscription_name"; exit 1; }
+              yq eval '.environment' "$file" > /dev/null || { echo "Missing environment"; exit 1; }
+              
+              # Validate environment values
+              env=$(yq eval '.environment' "$file")
+              if [[ ! "$env" =~ ^(dev|stage|prod|qa|uat)$ ]]; then
+                echo "Invalid environment: $env. Must be one of: dev, stage, prod, qa, uat"
+                exit 1
+              fi
+              
+              echo "✓ $file is valid"
+            fi
+          done
 
   provision:
+    name: Provision Subscription
     needs: validate
     runs-on: ubuntu-latest
     environment: platform-prod
-
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
     steps:
       - uses: actions/checkout@v4
 
-      - uses: azure/login@v2
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.PLATFORM_SUBSCRIPTION_ID }}
 
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
       - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+
+      - name: Export Subscription Details
         run: |
-          terraform init
-          terraform apply -auto-approve
+          terraform output -json > subscription-outputs.json
+          cat subscription-outputs.json

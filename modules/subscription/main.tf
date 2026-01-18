@@ -20,26 +20,43 @@ resource "azurerm_role_assignment" "owners" {
 resource "azurerm_resource_group" "baseline" {
   provider = azurerm.subscription
 
-  name     = "rg-${var.subscription_name}-baseline"
+  name     = var.resource_group_name
   location = var.location
 
-  tags = {
-    Environment = var.environment
-    ManagedBy   = "subscription-factory"
-  }
+  tags = merge(
+    var.tags,
+    {
+      Purpose = "Baseline Infrastructure"
+    }
+  )
 }
 
 resource "azurerm_log_analytics_workspace" "baseline" {
   provider = azurerm.subscription
 
-  name                = "law-${var.subscription_name}"
+  name                = var.law_name
   location            = var.location
   resource_group_name = azurerm_resource_group.baseline.name
   sku                 = "PerGB2018"
   retention_in_days   = 30
 
-  tags = {
-    Environment = var.environment
-    ManagedBy   = "subscription-factory"
-  }
+  tags = merge(
+    var.tags,
+    {
+      Purpose = "Baseline Monitoring"
+    }
+  )
+}
+
+# DDoS Protection Plan (optional but recommended for enterprise)
+resource "azurerm_network_ddos_protection_plan" "baseline" {
+  count = var.enable_ddos_protection ? 1 : 0
+
+  provider = azurerm.subscription
+
+  name                = "${var.resource_group_name}-ddos"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.baseline.name
+
+  tags = var.tags
 }

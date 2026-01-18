@@ -21,6 +21,60 @@ variable "location" {
 }
 
 variable "environment" {
-  description = "Environment name (dev, staging, prod)"
+  description = "Environment name (dev, stage, prod)"
   type        = string
+
+  validation {
+    condition     = contains(["dev", "stage", "prod", "qa", "uat"], var.environment)
+    error_message = "Environment must be one of: dev, stage, prod, qa, uat."
+  }
 }
+
+variable "billing_entity" {
+  description = "Cost center or billing entity for chargeback"
+  type        = string
+  default     = "platform"
+}
+
+# Budget & Cost Management
+variable "monthly_budget" {
+  description = "Monthly budget limit in USD (0 = disabled)"
+  type        = number
+  default     = 0
+
+  validation {
+    condition     = var.monthly_budget >= 0
+    error_message = "Monthly budget must be >= 0."
+  }
+}
+
+variable "budget_alert_threshold" {
+  description = "Alert when budget exceeds this percentage (0-100)"
+  type        = number
+  default     = 80
+
+  validation {
+    condition     = var.budget_alert_threshold >= 0 && var.budget_alert_threshold <= 100
+    error_message = "Budget alert threshold must be between 0 and 100."
+  }
+}
+
+variable "alert_emails" {
+  description = "Email addresses to notify for budget alerts"
+  type        = list(string)
+  default     = []
+}
+
+# Security & Compliance
+variable "enable_defender" {
+  description = "Enable Microsoft Defender for Cloud"
+  type        = bool
+  default     = true
+}
+
+variable "enable_ddos_protection" {
+  description = "Enable DDoS protection for virtual networks"
+  type        = bool
+  default     = true
+}
+
