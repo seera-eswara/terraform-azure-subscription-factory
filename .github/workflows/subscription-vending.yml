@@ -55,8 +55,8 @@ jobs:
               
               # Validate environment values
               env=$(yq eval '.environment' "$file")
-              if [[ ! "$env" =~ ^(dev|stage|prod|qa|uat)$ ]]; then
-                echo "Invalid environment: $env. Must be one of: dev, stage, prod, qa, uat"
+              if [[ ! "$env" =~ ^(dev|stage|prod|qa|uat|sit)$ ]]; then
+                echo "Invalid environment: $env. Must be one of: dev, stage, prod, qa, uat, sit"
                 exit 1
               fi
 

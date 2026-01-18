@@ -14,7 +14,7 @@ To request a new Azure subscription, follow these steps:
 ```yaml
 # requests/dev/my-app.yaml
 subscription_name: my-app-dev          # Team name + environment (lowercase, hyphens)
-environment: dev                       # One of: dev, stage, prod, qa, uat
+environment: dev                       # One of: dev, stage, prod, qa, uat, sit
 app_code: app                          # 3-letter app code; maps to MG: lz-<app_code>
 owners:                                # Azure AD object IDs of subscription admins
   - "11111111-1111-1111-1111-111111111111"
