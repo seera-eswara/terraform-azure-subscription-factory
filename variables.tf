@@ -3,6 +3,22 @@ variable "subscription_name" {
   type        = string
 }
 
+variable "app_code" {
+  description = "Three-letter application code used for naming and management group mapping"
+  type        = string
+
+  validation {
+    condition     = can(regex("^[a-z0-9]{3}$", var.app_code))
+    error_message = "app_code must be exactly 3 lowercase alphanumeric characters (e.g., app, crm, erp)."
+  }
+}
+
+variable "management_group_prefix" {
+  description = "Prefix for team management groups under LandingZones (e.g., lz-app, lz-crm)"
+  type        = string
+  default     = "lz"
+}
+
 variable "billing_scope_id" {
   description = "Azure billing scope ID for subscription creation"
   type        = string

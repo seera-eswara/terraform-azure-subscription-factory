@@ -1,7 +1,7 @@
 module "naming" {
   source = "git::https://github.com/seera-eswara/terraform-azure-modules.git//modules/naming?ref=main"
 
-  app_code    = lower(substr(var.subscription_name, 0, 3))
+  app_code    = var.app_code
   environment = var.environment
   location    = "eastus"
 
@@ -19,7 +19,7 @@ module "subscription" {
   }
 
   subscription_name      = var.subscription_name
-  management_group_id    = data.terraform_remote_state.landing_zone.outputs.corp_mg_id
+  management_group_id    = data.azurerm_management_group.team.id
   billing_scope_id       = var.billing_scope_id
   owners                 = var.owners
   location               = var.location

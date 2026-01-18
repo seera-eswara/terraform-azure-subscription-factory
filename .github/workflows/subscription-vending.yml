@@ -51,11 +51,18 @@ jobs:
               # Check required fields
               yq eval '.subscription_name' "$file" > /dev/null || { echo "Missing subscription_name"; exit 1; }
               yq eval '.environment' "$file" > /dev/null || { echo "Missing environment"; exit 1; }
+              yq eval '.app_code' "$file" > /dev/null || { echo "Missing app_code"; exit 1; }
               
               # Validate environment values
               env=$(yq eval '.environment' "$file")
               if [[ ! "$env" =~ ^(dev|stage|prod|qa|uat)$ ]]; then
                 echo "Invalid environment: $env. Must be one of: dev, stage, prod, qa, uat"
+                exit 1
+              fi
+
+              app_code=$(yq eval '.app_code' "$file")
+              if [[ ! "$app_code" =~ ^[a-z0-9]{3}$ ]]; then
+                echo "Invalid app_code: $app_code. Must be exactly 3 lowercase alphanumeric characters (e.g., app, crm, erp)"
                 exit 1
               fi
               

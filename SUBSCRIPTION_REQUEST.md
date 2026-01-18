@@ -15,6 +15,7 @@ To request a new Azure subscription, follow these steps:
 # requests/dev/my-app.yaml
 subscription_name: my-app-dev          # Team name + environment (lowercase, hyphens)
 environment: dev                       # One of: dev, stage, prod, qa, uat
+app_code: app                          # 3-letter app code; maps to MG: lz-<app_code>
 owners:                                # Azure AD object IDs of subscription admins
   - "11111111-1111-1111-1111-111111111111"
   - "22222222-2222-2222-2222-222222222222"
@@ -58,6 +59,7 @@ Each subscription automatically gets:
 ```yaml
 subscription_name: analytics-dev
 environment: dev
+app_code: anl
 owners:
   - 11111111-1111-1111-1111-111111111111
 monthly_budget: 2000
@@ -70,6 +72,7 @@ alert_emails:
 ```yaml
 subscription_name: payment-processor-prod
 environment: prod
+app_code: pay
 owners:
   - 22222222-2222-2222-2222-222222222222
   - 33333333-3333-3333-3333-333333333333
