@@ -1,0 +1,35 @@
+name: Subscription Vending
+
+on:
+  pull_request:
+    paths:
+      - "requests/**.yaml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate request
+        run: |
+          yq '.subscription_name' ${{ github.event.pull_request.changed_files }}
+
+  provision:
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: platform-prod
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.PLATFORM_SUBSCRIPTION_ID }}
+
+      - name: Terraform Apply
+        run: |
+          terraform init
+          terraform apply -auto-approve
