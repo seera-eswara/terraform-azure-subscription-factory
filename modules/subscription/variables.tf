@@ -70,3 +70,26 @@ variable "tags" {
   default     = {}
 }
 
+variable "app_code" {
+  description = "Application code/name (e.g., app1, payment-service)"
+  type        = string
+}
+
+variable "create_policy_assignments" {
+  description = "Whether to create app-specific policy assignments"
+  type        = bool
+  default     = true
+}
+
+variable "allowed_regions" {
+  description = "Allowed Azure regions for resource deployment"
+  type        = list(string)
+  default     = ["eastus", "westus2"]
+}
+
+variable "required_tags" {
+  description = "Required tags for all resources"
+  type        = list(string)
+  default     = ["Environment", "CostCenter", "Owner"]
+}
+

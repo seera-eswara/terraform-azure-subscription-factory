@@ -94,3 +94,22 @@ variable "enable_ddos_protection" {
   default     = true
 }
 
+# Governance & Policies
+variable "create_policy_assignments" {
+  description = "Whether to create app-specific policy assignments"
+  type        = bool
+  default     = true
+}
+
+variable "allowed_regions" {
+  description = "Allowed Azure regions for resource deployment"
+  type        = list(string)
+  default     = ["eastus", "westus2"]
+}
+
+variable "required_tags" {
+  description = "Required tags to enforce on all resources"
+  type        = list(string)
+  default     = ["Environment", "CostCenter", "Owner"]
+}
+

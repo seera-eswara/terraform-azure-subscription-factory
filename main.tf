@@ -18,6 +18,7 @@ module "subscription" {
     azurerm.subscription = azurerm.subscription
   }
 
+  app_code               = var.app_code
   subscription_name      = var.subscription_name
   management_group_id    = data.azurerm_management_group.team.id
   billing_scope_id       = var.billing_scope_id
@@ -37,6 +38,11 @@ module "subscription" {
   # Security
   enable_defender        = var.enable_defender
   enable_ddos_protection = var.enable_ddos_protection
+  
+  # Policies
+  create_policy_assignments = var.create_policy_assignments
+  allowed_regions           = var.allowed_regions
+  required_tags             = var.required_tags
   
   # Tags
   tags                   = module.naming.tags
