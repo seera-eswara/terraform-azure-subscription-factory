@@ -32,3 +32,13 @@ output "ddos_protection_plan_id" {
   description = "The DDoS Protection Plan ID"
   value       = try(azurerm_network_ddos_protection_plan.baseline[0].id, null)
 }
+
+output "app_contributor_assignment_ids" {
+  description = "Role assignment IDs for app Contributor groups"
+  value       = [for ra in azurerm_role_assignment.app_contributor : ra.id]
+}
+
+output "finops_reader_assignment_ids" {
+  description = "Role assignment IDs for FinOps Reader groups"
+  value       = [for ra in azurerm_role_assignment.finops_reader : ra.id]
+}

@@ -113,3 +113,16 @@ variable "required_tags" {
   default     = ["Environment", "CostCenter", "Owner"]
 }
 
+# RBAC Groups (by display name)
+variable "app_contributor_groups" {
+  description = "Azure AD group display names to grant Contributor at subscription scope"
+  type        = list(string)
+  default     = []
+}
+
+variable "finops_reader_groups" {
+  description = "Azure AD group display names to grant Reader at subscription scope"
+  type        = list(string)
+  default     = []
+}
+

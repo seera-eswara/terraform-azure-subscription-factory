@@ -43,6 +43,10 @@ module "subscription" {
   create_policy_assignments = var.create_policy_assignments
   allowed_regions           = var.allowed_regions
   required_tags             = var.required_tags
+
+  # RBAC group bindings
+  app_contributor_groups  = var.app_contributor_groups
+  finops_reader_groups    = var.finops_reader_groups
   
   # Tags
   tags                   = module.naming.tags
