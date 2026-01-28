@@ -8,7 +8,7 @@ Have RBAC assigned
 
 Are ready for app teams with zero manual steps
 
-This is platform-owned, not app-owned.
+This is cloud-owned, not app-owned.
 
 
 Request (YAML / PR / Form)

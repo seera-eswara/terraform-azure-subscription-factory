@@ -79,19 +79,19 @@ owners:
 monthly_budget: 50000
 budget_alert_threshold: 70
 alert_emails:
-  - platform-team@company.com
+  - cloud-team@company.com
   - finance@company.com
 enable_defender: true
 enable_ddos_protection: true
 ```
 
-## Platform Teams - Governance
+## cloud Teams - Governance
 
 ### Registered App Codes
 
 | Code | Team | Owner | Contact |
 |------|------|-------|---------|
-| crm | Sales Platform | John Doe | john@company.com |
+| crm | Sales cloud | John Doe | john@company.com |
 | erp | Finance Systems | Jane Smith | jane@company.com |
 | app | App Team 1 | Bob Johnson | bob@company.com |
 
@@ -151,6 +151,6 @@ Teams should use these regions:
 ## Support
 
 For help with subscription requests:
-- 📧 platform-engineering@company.com
-- 💬 #platform-engineering Slack channel
+- 📧 cloud-engineering@company.com
+- 💬 #cloud-engineering Slack channel
 - 📋 Internal wiki: https://wiki.company.com/azure

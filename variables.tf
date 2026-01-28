@@ -1,6 +1,7 @@
 variable "subscription_name" {
-  description = "Name of the subscription to create"
+  description = "Name of the subscription to create (optional - will use naming module if not provided)"
   type        = string
+  default     = null
 }
 
 variable "app_code" {
@@ -13,8 +14,14 @@ variable "app_code" {
   }
 }
 
+variable "module" {
+  description = "Module or technology name (e.g., 'react', 'api', 'ml') for subscription naming"
+  type        = string
+  default     = null
+}
+
 variable "management_group_prefix" {
-  description = "Prefix for team management groups under LandingZones (e.g., lz-app, lz-crm)"
+  description = "Prefix for team management groups under LandingZones (e.g., lz-app, lz-crm) - DEPRECATED"
   type        = string
   default     = "lz"
 }
@@ -25,7 +32,13 @@ variable "billing_scope_id" {
 }
 
 variable "owners" {
-  description = "List of principal IDs to assign as subscription owners"
+  description = "List of principal IDs to assign as subscription owners and app MG owners"
+  type        = list(string)
+  default     = []
+}
+
+variable "app_contributors" {
+  description = "List of principal IDs to assign as app management group contributors"
   type        = list(string)
   default     = []
 }
@@ -49,7 +62,7 @@ variable "environment" {
 variable "billing_entity" {
   description = "Cost center or billing entity for chargeback"
   type        = string
-  default     = "platform"
+  default     = "cloud"
 }
 
 # Budget & Cost Management

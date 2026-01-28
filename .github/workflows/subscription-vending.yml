@@ -74,7 +74,7 @@ jobs:
     name: Provision Subscription
     needs: validate
     runs-on: ubuntu-latest
-    environment: platform-prod
+    environment: cloud-prod
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     
     steps:
@@ -89,7 +89,7 @@ jobs:
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.PLATFORM_SUBSCRIPTION_ID }}
+          subscription-id: ${{ secrets.cloud_SUBSCRIPTION_ID }}
 
       - name: Terraform Init
         run: terraform init

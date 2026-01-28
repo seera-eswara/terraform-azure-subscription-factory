@@ -10,7 +10,15 @@ data "terraform_remote_state" "landing_zone" {
   }
 }
 
-# Resolve team management group under LandingZones using app_code
-data "azurerm_management_group" "team" {
-  name = "${var.management_group_prefix}-${var.app_code}"
+# Get Applications MG from landing zone to use as parent for app MGs
+data "azurerm_management_group" "applications" {
+  name = data.terraform_remote_state.landing_zone.outputs.applications_mg_id
 }
+
+# Try to resolve app-specific management group
+# If it doesn't exist, the module below will create it
+data "azurerm_management_group" "app_mg" {
+  name = "mg-${lower(var.app_code)}"
+
+  # This might fail if MG doesn't exist yet, which is OK
+  # The module.app_management_group below will create it

@@ -2,6 +2,7 @@ module "naming" {
   source = "git::https://github.com/seera-eswara/terraform-azure-modules.git//modules/naming?ref=main"
 
   app_code    = var.app_code
+  module      = var.module  # Pass module for subscription naming
   environment = var.environment
   location    = "eastus"
 
@@ -9,6 +10,22 @@ module "naming" {
     SubscriptionPurpose = "App Team Subscription"
     BillingEntity       = var.billing_entity
   }
+}
+
+# Create app-specific management group if it doesn't exist
+# This is created on-demand as part of subscription provisioning
+# rather than requiring cloud team to manage it separately
+module "app_management_group" {
+  source = "git::https://github.com/seera-eswara/terraform-azure-modules.git//modules/app-management-group?ref=main"
+
+  app_code                   = var.app_code
+  parent_management_group_id = data.azurerm_management_group.applications.id
+
+  app_owners       = var.owners  # App team owners assigned to app MG
+  app_contributors = var.app_contributors
+
+  # Ensure this happens before subscription creation
+  depends_on = [data.azurerm_management_group.applications]
 }
 
 module "subscription" {
@@ -19,8 +36,8 @@ module "subscription" {
   }
 
   app_code               = var.app_code
-  subscription_name      = var.subscription_name
-  management_group_id    = data.azurerm_management_group.team.id
+  subscription_name      = coalesce(var.subscription_name, module.naming.subscription)  # Use naming module if not provided
+  management_group_id    = module.app_management_group.management_group_id
   billing_scope_id       = var.billing_scope_id
   owners                 = var.owners
   location               = var.location
@@ -50,4 +67,7 @@ module "subscription" {
   
   # Tags
   tags                   = module.naming.tags
+
+  # Ensure subscription is created after MG
+  depends_on = [module.app_management_group]
 }
