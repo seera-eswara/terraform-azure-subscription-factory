@@ -44,7 +44,7 @@ resource "azurerm_log_analytics_workspace" "baseline" {
     var.tags,
     {
       Purpose = "Baseline Monitoring"
-      Module  = "diagnostics"  # Module-level tag for cost tracking
+      InfraComponent = "diagnostics"  # Infrastructure component tag for cost tracking
     }
   )
 }

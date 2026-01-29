@@ -35,7 +35,7 @@ resource "azurerm_user_assigned_identity" "app_identity" {
     var.tags,
     {
       Purpose = "Application Managed Identity"
-      Module  = "identity"  # Module-level tag for cost tracking
+      InfraComponent = "identity"  # Infrastructure component tag for cost tracking
     }
   )
 }

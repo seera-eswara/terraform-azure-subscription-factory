@@ -26,7 +26,7 @@ resource "azurerm_monitor_action_group" "app_alerts" {
     var.tags,
     {
       Purpose = "Application Alerts"
-      Module  = "monitoring"  # Module-level tag for cost tracking
+      InfraComponent = "monitoring"  # Infrastructure component tag for cost tracking
     }
   )
 }
