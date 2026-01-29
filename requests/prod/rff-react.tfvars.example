@@ -1,0 +1,104 @@
+# Example Subscription Request for rff-react Application
+# This example demonstrates the complete app onboarding flow with networking
+# 
+# File path should be: requests/prod/rff-react.tfvars
+# Or for dev: requests/dev/rff-react.tfvars
+
+# Basic Application Information
+app_code        = "rff"  # Three-letter code for React Frontend Framework
+module          = "react"
+subscription_name = "sub-rff-react-prod"
+environment     = "prod"
+location        = "eastus"
+billing_entity  = "marketing"
+
+# Owners and Contributors
+owners = [
+  "00000000-0000-0000-0000-000000000001",  # App owner principal ID
+]
+
+app_contributors = [
+  "00000000-0000-0000-0000-000000000002",  # App contributor principal ID
+]
+
+app_contributor_groups = [
+  "rff-team-contributors",  # Azure AD group display name
+]
+
+finops_reader_groups = [
+  "finance-team-readers",
+]
+
+# Budget & Cost Management
+monthly_budget         = 5000  # $5,000/month budget
+budget_alert_threshold = 80    # Alert at 80% utilization
+alert_emails = [
+  "finance@company.com",
+  "devops@company.com",
+]
+
+# Security & Compliance
+enable_defender        = true
+enable_ddos_protection = false  # Can be enabled later if needed
+
+# Governance
+create_policy_assignments = true
+allowed_regions = [
+  "eastus",
+  "westus2",
+]
+required_tags = [
+  "Environment",
+  "CostCenter",
+  "Owner",
+  "Application",
+]
+
+# ============================================
+# NETWORKING CONFIGURATION
+# ============================================
+
+# Enable spoke VNet creation
+create_spoke_vnet = true
+
+# Spoke VNet address space (non-overlapping with hub)
+spoke_vnet_address_space = ["10.100.0.0/16"]
+
+# App Subnet - for web app instances
+app_subnet_prefix = "10.100.1.0/24"
+
+# AKS Subnet - for containerized microservices (if using AKS)
+enable_aks_subnet = true
+aks_subnet_prefix = "10.100.2.0/24"
+
+# Database Subnet - for private endpoints to managed databases
+enable_database_subnet = true
+database_subnet_prefix = "10.100.3.0/24"
+
+# Functions Subnet - for Azure Functions (if using serverless)
+enable_functions_subnet = true
+functions_subnet_prefix = "10.100.4.0/24"
+
+# Private Endpoints Subnet - for app-specific private endpoints
+enable_private_endpoints_subnet = true
+private_endpoints_subnet_prefix = "10.100.5.0/24"
+
+# Hub VNet Peering Configuration
+hub_vnet_id            = "/subscriptions/5d8deb1d-5156-4dd3-8d72-5cbedd3f7f46/resourceGroups/rg-network-hub-prod/providers/Microsoft.Network/virtualNetworks/vnet-hub-prod"
+hub_vnet_name          = "vnet-hub-prod"
+hub_vnet_address_space = ["10.0.0.0/16"]
+use_remote_gateway     = false
+
+# Private Endpoints for Shared Resources
+# These would point to app team's shared Key Vault, Storage, and Database
+keyvault_id      = "/subscriptions/xxxxx/resourceGroups/xxxxx/providers/Microsoft.KeyVault/vaults/kv-rff-prod"
+storage_account_id = "/subscriptions/xxxxx/resourceGroups/xxxxx/providers/Microsoft.Storage/storageAccounts/staapprfprod"
+sqldb_id         = "/subscriptions/xxxxx/resourceGroups/xxxxx/providers/Microsoft.Sql/servers/sql-rff-prod/databases/rff-maindb"
+
+# Tags (will be merged with naming module tags)
+# Note: Naming module automatically adds subscription-level tags
+# tags = {
+#   CostCenter = "marketing"
+#   Owner      = "app-team"
+#   Project    = "rff-platform"
+# }

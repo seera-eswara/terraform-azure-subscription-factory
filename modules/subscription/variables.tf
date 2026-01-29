@@ -106,3 +106,118 @@ variable "finops_reader_groups" {
   default     = []
 }
 
+# Networking Variables
+variable "create_spoke_vnet" {
+  description = "Whether to create a spoke VNet for this app"
+  type        = bool
+  default     = false
+}
+
+variable "spoke_vnet_name" {
+  description = "Name of the spoke virtual network"
+  type        = string
+  default     = ""
+}
+
+variable "spoke_vnet_address_space" {
+  description = "Address space(s) for the spoke VNet"
+  type        = list(string)
+  default     = ["10.100.0.0/16"]
+}
+
+variable "app_subnet_prefix" {
+  description = "Address prefix for application subnet"
+  type        = string
+  default     = "10.100.1.0/24"
+}
+
+variable "enable_aks_subnet" {
+  description = "Whether to create AKS subnet"
+  type        = bool
+  default     = false
+}
+
+variable "aks_subnet_prefix" {
+  description = "Address prefix for AKS subnet"
+  type        = string
+  default     = "10.100.2.0/24"
+}
+
+variable "enable_database_subnet" {
+  description = "Whether to create database subnet"
+  type        = bool
+  default     = false
+}
+
+variable "database_subnet_prefix" {
+  description = "Address prefix for database subnet"
+  type        = string
+  default     = "10.100.3.0/24"
+}
+
+variable "enable_functions_subnet" {
+  description = "Whether to create Azure Functions subnet"
+  type        = bool
+  default     = false
+}
+
+variable "functions_subnet_prefix" {
+  description = "Address prefix for Azure Functions subnet"
+  type        = string
+  default     = "10.100.4.0/24"
+}
+
+variable "enable_private_endpoints_subnet" {
+  description = "Whether to create private endpoints subnet"
+  type        = bool
+  default     = false
+}
+
+variable "private_endpoints_subnet_prefix" {
+  description = "Address prefix for private endpoints subnet"
+  type        = string
+  default     = "10.100.5.0/24"
+}
+
+variable "hub_vnet_id" {
+  description = "Resource ID of the hub VNet for peering"
+  type        = string
+  default     = null
+}
+
+variable "hub_vnet_name" {
+  description = "Name of the hub VNet for peering"
+  type        = string
+  default     = null
+}
+
+variable "hub_vnet_address_space" {
+  description = "Address space of the hub VNet"
+  type        = list(string)
+  default     = ["10.0.0.0/16"]
+}
+
+variable "use_remote_gateway" {
+  description = "Whether to use remote gateway for hub VNet peering"
+  type        = bool
+  default     = false
+}
+
+variable "keyvault_id" {
+  description = "Resource ID of Key Vault for private endpoint"
+  type        = string
+  default     = null
+}
+
+variable "storage_account_id" {
+  description = "Resource ID of Storage Account for private endpoint"
+  type        = string
+  default     = null
+}
+
+variable "sqldb_id" {
+  description = "Resource ID of SQL Database for private endpoint"
+  type        = string
+  default     = null
+}
+

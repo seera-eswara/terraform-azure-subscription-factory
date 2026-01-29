@@ -56,6 +56,27 @@ module "subscription" {
   enable_defender        = var.enable_defender
   enable_ddos_protection = var.enable_ddos_protection
   
+  # Networking
+  create_spoke_vnet                = var.create_spoke_vnet
+  spoke_vnet_name                  = var.create_spoke_vnet ? "vnet-${var.app_code}-spoke-${var.environment}" : ""
+  spoke_vnet_address_space         = var.spoke_vnet_address_space
+  app_subnet_prefix                = var.app_subnet_prefix
+  enable_aks_subnet                = var.enable_aks_subnet
+  aks_subnet_prefix                = var.aks_subnet_prefix
+  enable_database_subnet           = var.enable_database_subnet
+  database_subnet_prefix           = var.database_subnet_prefix
+  enable_functions_subnet          = var.enable_functions_subnet
+  functions_subnet_prefix          = var.functions_subnet_prefix
+  enable_private_endpoints_subnet  = var.enable_private_endpoints_subnet
+  private_endpoints_subnet_prefix  = var.private_endpoints_subnet_prefix
+  hub_vnet_id                      = var.hub_vnet_id
+  hub_vnet_name                    = var.hub_vnet_name
+  hub_vnet_address_space           = var.hub_vnet_address_space
+  use_remote_gateway               = var.use_remote_gateway
+  keyvault_id                      = var.keyvault_id
+  storage_account_id               = var.storage_account_id
+  sqldb_id                         = var.sqldb_id
+  
   # Policies
   create_policy_assignments = var.create_policy_assignments
   allowed_regions           = var.allowed_regions
