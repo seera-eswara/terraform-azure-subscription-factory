@@ -253,3 +253,49 @@ variable "finops_reader_groups" {
   default     = []
 }
 
+# ============================================================================
+# Diagnostics Configuration
+# ============================================================================
+variable "enable_diagnostic_settings" {
+  description = "Enable diagnostic settings for subscription activity logs"
+  type        = bool
+  default     = true
+}
+
+variable "event_hub_authorization_rule_id" {
+  description = "Event Hub authorization rule ID for streaming logs (optional)"
+  type        = string
+  default     = null
+}
+
+# ============================================================================
+# Identity Configuration
+# ============================================================================
+variable "enable_app_identity" {
+  description = "Create user-assigned managed identity for the application"
+  type        = bool
+  default     = true
+}
+
+# ============================================================================
+# Monitoring and Alerting Configuration
+# ============================================================================
+variable "enable_monitoring" {
+  description = "Enable monitoring, alerting, and action groups"
+  type        = bool
+  default     = true
+}
+
+variable "alert_email_addresses" {
+  description = "Email addresses for alert notifications"
+  type        = list(string)
+  default     = []
+}
+
+variable "webhook_url" {
+  description = "Webhook URL for custom alert integrations (Slack, Teams, etc)"
+  type        = string
+  default     = null
+}
+
+

@@ -86,9 +86,22 @@ module "subscription" {
   app_contributor_groups  = var.app_contributor_groups
   finops_reader_groups    = var.finops_reader_groups
   
+  # Diagnostics
+  enable_diagnostic_settings      = var.enable_diagnostic_settings
+  event_hub_authorization_rule_id = var.event_hub_authorization_rule_id
+  
+  # Identity
+  enable_app_identity = var.enable_app_identity
+  
+  # Monitoring & Alerting
+  enable_monitoring        = var.enable_monitoring
+  alert_email_addresses    = var.alert_email_addresses
+  webhook_url              = var.webhook_url
+  
   # Tags
   tags                   = module.naming.tags
 
   # Ensure subscription is created after MG
   depends_on = [module.app_management_group]
 }
+

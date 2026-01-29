@@ -227,3 +227,54 @@ variable "sqldb_id" {
   default     = null
 }
 
+# ============================================================================
+# Diagnostics Configuration
+# ============================================================================
+variable "enable_diagnostic_settings" {
+  description = "Enable diagnostic settings for subscription activity logs"
+  type        = bool
+  default     = true
+  # COST: Free - Log Analytics workspace already included in baseline
+}
+
+variable "event_hub_authorization_rule_id" {
+  description = "Event Hub authorization rule ID for streaming logs (optional)"
+  type        = string
+  default     = null
+  # COST: Free - only pay if using Event Hub for other purposes
+}
+
+# ============================================================================
+# Identity Configuration
+# ============================================================================
+variable "enable_app_identity" {
+  description = "Create user-assigned managed identity for the application"
+  type        = bool
+  default     = true
+  # COST: Free - no additional charges for managed identities
+}
+
+# ============================================================================
+# Monitoring and Alerting Configuration
+# ============================================================================
+variable "enable_monitoring" {
+  description = "Enable monitoring, alerting, and action groups"
+  type        = bool
+  default     = true
+  # COST: Free - action groups and basic alert rules are free
+}
+
+variable "alert_email_addresses" {
+  description = "Email addresses for alert notifications"
+  type        = list(string)
+  default     = []
+  # COST: Free - email notifications don't incur charges
+}
+
+variable "webhook_url" {
+  description = "Webhook URL for custom alert integrations (Slack, Teams, etc)"
+  type        = string
+  default     = null
+  # COST: Free webhook receiver, external service cost depends on integration
+}
+

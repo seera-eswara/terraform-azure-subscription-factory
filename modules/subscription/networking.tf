@@ -12,8 +12,7 @@ resource "azurerm_resource_group" "app_network" {
   tags = merge(
     var.tags,
     {
-      Purpose = "Application Networking"
-    }
+      Purpose = "Application Networking"      Module  = "networking"  # Module-level tag for cost tracking    }
   )
 }
 
@@ -33,6 +32,7 @@ resource "azurerm_virtual_network" "spoke" {
     {
       Purpose = "Application Workloads"
       TierType = "Spoke"
+      Module  = "networking"  # Module-level tag for cost tracking
     }
   )
 }
