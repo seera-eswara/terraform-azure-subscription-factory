@@ -52,16 +52,22 @@ variable "alert_emails" {
   default     = []
 }
 
+# COST OPTIMIZATION NOTE: Defender for Cloud costs ~$7+/resource/month
+# For learning/interview prep with limited $200 credits, disabled by default
+# Production deployments should enable this for security compliance
 variable "enable_defender" {
   description = "Enable Microsoft Defender for Cloud"
   type        = bool
-  default     = true
+  default     = false  # Changed from true to false for cost savings
 }
 
+# COST OPTIMIZATION NOTE: DDoS Protection costs ~$3,000/month
+# Extremely expensive and unnecessary for learning environments
+# Enable only in production with actual public-facing services requiring DDoS mitigation
 variable "enable_ddos_protection" {
   description = "Enable DDoS protection"
   type        = bool
-  default     = true
+  default     = false  # Changed from true to false - CRITICAL cost saving measure
 }
 
 variable "tags" {

@@ -48,15 +48,35 @@ resource "azurerm_log_analytics_workspace" "baseline" {
   )
 }
 
-# DDoS Protection Plan (optional but recommended for enterprise)
-resource "azurerm_network_ddos_protection_plan" "baseline" {
-  count = var.enable_ddos_protection ? 1 : 0
+# ============================================================================
+# COST OPTIMIZATION: DDoS Protection Disabled
+# ============================================================================
+# DDoS Protection Plan is DISABLED by default to preserve Azure free credits
+#
+# COST: ~$3,000/month (EXTREMELY EXPENSIVE)
+#
+# WHEN TO ENABLE (Production Only):
+# 1. Set variable.enable_ddos_protection = true in terraform.tfvars
+# 2. Only if you have public-facing applications requiring DDoS mitigation
+# 3. Ensure enterprise budget approval (~$36,000/year)
+# 4. Monitor costs weekly in Azure Cost Management
+#
+# LEARNING REFERENCE:
+# This code demonstrates Azure DDoS Protection architecture.
+# Understand the cost implications before enabling in any environment.
+# ============================================================================
 
-  provider = azurerm.subscription
+# DDoS Protection Plan (COMMENTED OUT - extremely costly)
+# Uncomment ONLY when enable_ddos_protection = true AND you have budget
+# resource "azurerm_network_ddos_protection_plan" "baseline" {
+#   count = var.enable_ddos_protection ? 1 : 0
+#
+#   provider = azurerm.subscription
+#
+#   name                = "${var.resource_group_name}-ddos"
+#   location            = var.location
+#   resource_group_name = azurerm_resource_group.baseline.name
+#
+#   tags = var.tags
+# }
 
-  name                = "${var.resource_group_name}-ddos"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.baseline.name
-
-  tags = var.tags
-}

@@ -95,16 +95,21 @@ variable "alert_emails" {
 }
 
 # Security & Compliance
+# COST OPTIMIZATION NOTE: Defender for Cloud costs ~$7+/resource/month in production
+# Disabled by default for learning/interview prep to preserve $200 free credits
+# Re-enable in production for security compliance and threat detection
 variable "enable_defender" {
   description = "Enable Microsoft Defender for Cloud"
   type        = bool
-  default     = true
+  default     = false  # Changed from true - cost optimization for learning
 }
 
 variable "enable_ddos_protection" {
   description = "Enable DDoS protection for virtual networks"
   type        = bool
-  default     = true
+  default     = false  # Changed from true - CRITICAL COST OPTIMIZATION
+  # NOTE: DDoS Protection costs ~$3,000/month - only use in production
+  # with actual public-facing services requiring DDoS mitigation
 }
 
 # Networking Variables
