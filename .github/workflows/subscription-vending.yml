@@ -1,6 +1,7 @@
 name: Subscription Vending & Provisioning
 
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - "requests/**.yaml"
