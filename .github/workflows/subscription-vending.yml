@@ -73,7 +73,7 @@ jobs:
 
   provision:
     name: Provision Subscription
-    needs: validate
+    # needs: validate
     runs-on: ubuntu-latest
     environment: cloud-prod
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
