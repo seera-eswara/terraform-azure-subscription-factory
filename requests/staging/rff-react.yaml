@@ -4,17 +4,18 @@
 # Environment: Staging
 # This subscription will be placed under MG-RFF management group
 # Subscription name will be auto-generated: rff-react-stage
+# COMMENTED OUT - Only dev environment is being onboarded
 
-environment: stage
-app_code: rff
-module: react
-tier: staging
-
-# Application owners - these will be assigned Owner role at subscription level
-owners:
-  - 4202840f-7cb6-4012-b0f3-5dadda936b61  # Seera Eswara Rao
-
-# Tags for resource tracking and chargeback
-billing_entity: RFF-TEAM
-cost_center: CC-RFF-001
-application_id: rff-react
+# environment: stage
+# app_code: rff
+# module: react
+# tier: staging
+# 
+# # Application owners - these will be assigned Owner role at subscription level
+# owners:
+#   - 4202840f-7cb6-4012-b0f3-5dadda936b61  # Seera Eswara Rao
+# 
+# # Tags for resource tracking and chargeback
+# billing_entity: RFF-TEAM
+# cost_center: CC-RFF-001
+# application_id: rff-react

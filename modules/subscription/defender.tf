@@ -24,11 +24,12 @@
 
 # Enable Microsoft Defender for Cloud on subscription
 # Uncomment when enable_defender = true
-# resource "azurerm_security_center_subscription_pricing" "defender_vms" {\n  count = var.enable_defender ? 1 : 0
-
-  tier          = "Standard"
-  resource_type = "VirtualMachines"
-}
+# resource "azurerm_security_center_subscription_pricing" "defender_vms" {
+#   count = var.enable_defender ? 1 : 0
+#
+#   tier          = "Standard"
+#   resource_type = "VirtualMachines"
+# }
 
 resource "azurerm_security_center_subscription_pricing" "defender_storage" {
   count = var.enable_defender ? 1 : 0

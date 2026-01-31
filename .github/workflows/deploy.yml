@@ -4,6 +4,16 @@ on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        type: choice
+        default: dev
+        options:
+          - dev
+          - staging
+          - prod
 
 permissions:
   contents: read
@@ -12,7 +22,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: prod   # 👈 enforces approval
+    environment: ${{ github.event.inputs.environment || 'dev' }}   # 👈 enforces approval
 
     steps:
       - uses: actions/checkout@v4
@@ -30,7 +40,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -var-file=environments/${{ github.event.inputs.environment || 'dev' }}/terraform.tfvars -out=tfplan
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
