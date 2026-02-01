@@ -22,3 +22,6 @@ data "azurerm_management_group" "app_mg" {
 
   # This might fail if MG doesn't exist yet, which is OK
   # The module.app_management_group below will create it
+  
+  count = 0  # Disabled - module creates it instead
+}

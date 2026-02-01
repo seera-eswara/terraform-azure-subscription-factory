@@ -13,13 +13,14 @@ terraform {
 
 provider "azurerm" {
   features {}
+  use_oidc = true
 }
 
-provider "azuread" {}
 
 # Provider for the newly created subscription
 provider "azurerm" {
   alias           = "subscription"
   subscription_id = module.subscription.subscription_id
   features {}
+  use_oidc = true
 }
