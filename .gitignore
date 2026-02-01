@@ -7,6 +7,8 @@
 # Terraform variable files
 *.tfvars
 *.tfvars.json
+# Exception: allow dev.tfvars files in requests folders
+!requests/*/dev.tfvars
 
 # Override files
 override.tf
