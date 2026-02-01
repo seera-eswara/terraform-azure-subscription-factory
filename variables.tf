@@ -20,6 +20,12 @@ variable "module" {
   default     = null
 }
 
+variable "instance" {
+  description = "Instance number for resource naming (1-99, optional)"
+  type        = number
+  default     = null
+}
+
 variable "management_group_prefix" {
   description = "Prefix for team management groups under LandingZones (e.g., lz-app, lz-crm) - DEPRECATED"
   type        = string

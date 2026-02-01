@@ -5,6 +5,7 @@ module "naming" {
   module      = var.module  # Pass module for subscription naming
   environment = var.environment
   location    = "eastus"
+  instance    = var.instance != null ? var.instance : 1  # Default to 1 if not provided
 
   additional_tags = {
     SubscriptionPurpose = "App Team Subscription"
