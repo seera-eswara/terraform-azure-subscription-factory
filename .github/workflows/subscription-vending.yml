@@ -95,7 +95,16 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        env:
+          TF_LOG: INFO
+          TF_LOG_PATH: terraform.log
+        run: terraform plan -lock-timeout=5m -refresh=false -no-color -out=tfplan
+
+      - name: Terraform Plan Debug Log (on failure)
+        if: failure()
+        run: |
+          echo "---- terraform.log (last 200 lines) ----"
+          tail -n 200 terraform.log || true
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
