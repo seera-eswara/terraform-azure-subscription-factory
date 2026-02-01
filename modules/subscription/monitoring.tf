@@ -73,8 +73,8 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "high_cpu" {
     time_aggregation_method = "Average"
 
     failing_periods {
-      min_failing_periods_to_trigger_alert = 1
-      number_of_evaluation_periods          = 1
+      minimum_failing_periods_to_trigger_alert = 1
+      number_of_evaluation_periods              = 1
     }
 
     dimension {
@@ -82,26 +82,23 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "high_cpu" {
       operator = "Include"
       values   = ["*"]
     }
+
+    query = <<-QUERY
+      Perf
+      | where ObjectName == "Processor" and CounterName == "% Processor Time"
+      | where InstanceName == "_Total"
+      | summarize AvgCPU = avg(CounterValue) by Computer
+      | where AvgCPU > 80
+    QUERY
   }
 
   scopes = [azurerm_log_analytics_workspace.baseline.id]
 
-  data_source_id = azurerm_log_analytics_workspace.baseline.id
-
-  query = <<-QUERY
-    Perf
-    | where ObjectName == "Processor" and CounterName == "% Processor Time"
-    | where InstanceName == "_Total"
-    | summarize AvgCPU = avg(CounterValue) by Computer
-    | where AvgCPU > 80
-  QUERY
-
-  action_scope {
+  action {
     action_group_ids = [azurerm_monitor_action_group.app_alerts[0].id]
   }
 
-  display_description = "Triggers alert when average CPU exceeds 80% for ${var.app_code}"
-  auto_remediate       = false
+  description = "Triggers alert when average CPU exceeds 80% for ${var.app_code}"
 
   depends_on = [azurerm_monitor_action_group.app_alerts]
 }

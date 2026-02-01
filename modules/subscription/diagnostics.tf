@@ -49,9 +49,8 @@ resource "azurerm_monitor_diagnostic_setting" "subscription_activity_logs" {
     category = "Security"
   }
 
-  metric {
+  enabled_metric {
     category = "AllMetrics"
-    enabled  = true
   }
 }
 
