@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 4.57"
+      version = ">= 3.0, < 5.0"
     }
     azuread = {
       source  = "hashicorp/azuread"
@@ -16,6 +16,9 @@ provider "azurerm" {
   use_oidc = true
 }
 
+provider "azuread" {
+  use_oidc = true
+}
 
 # Provider for the newly created subscription
 provider "azurerm" {
