@@ -75,8 +75,8 @@ jobs:
     name: Provision Subscription
     # needs: validate
     runs-on: ubuntu-latest
-    # environment: cloud-prod
-    # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment: prod
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     
     steps:
       - uses: actions/checkout@v4
