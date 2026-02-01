@@ -34,8 +34,6 @@ resource "azurerm_monitor_action_group" "app_alerts" {
 # Email receivers are configured inline within the action group resource
 # The azurerm_monitor_action_group_email_receiver resource type is not supported
 # Use email_receiver blocks within azurerm_monitor_action_group instead
-  use_common_alert_schema = true
-}
 
 # COST OPTIMIZATION: Webhook receiver is disabled by default
 # WHY: Typically used for custom integrations (Slack, Teams, etc)
