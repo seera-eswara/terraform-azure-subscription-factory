@@ -133,8 +133,6 @@ resource "azurerm_subnet" "private_endpoints" {
   virtual_network_name = azurerm_virtual_network.spoke[0].name
   address_prefixes     = [var.private_endpoints_subnet_prefix]
 
-  private_endpoint_network_policies_enabled = true
-  private_link_service_network_policies_enabled = false
 }
 
 # Network Security Group for Application Subnet
@@ -252,7 +250,6 @@ resource "azurerm_route_table" "app" {
   name                          = "rt-app-to-hub-${var.environment}"
   location                      = var.location
   resource_group_name           = azurerm_resource_group.app_network[0].name
-  disable_bgp_route_propagation = false
 
   route {
     name                   = "RouteToHub"
@@ -283,7 +280,6 @@ resource "azurerm_route_table" "database" {
   name                          = "rt-database-to-hub-${var.environment}"
   location                      = var.location
   resource_group_name           = azurerm_resource_group.app_network[0].name
-  disable_bgp_route_propagation = false
 
   route {
     name                   = "RouteToHub"
@@ -404,8 +400,8 @@ resource "azurerm_monitor_diagnostic_setting" "spoke_vnet" {
     category = "VMProtectionAlerts"
   }
 
-  metric {
+  enabled_metric {
     category = "AllMetrics"
-    enabled  = true
+# enabled by default
   }
 }

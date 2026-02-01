@@ -56,56 +56,58 @@ resource "azurerm_monitor_action_group" "app_alerts" {
 
 # Log Analytics Alert Rule: High CPU Usage
 # Monitors for sustained high CPU on resources in the subscription
-resource "azurerm_monitor_scheduled_query_rules_alert_v2" "high_cpu" {
-  count = var.enable_monitoring ? 1 : 0
-
-  name                = "alert-high-cpu-${var.app_code}"
-  resource_group_name = azurerm_resource_group.baseline.name
-  location            = var.location
-
-  evaluation_frequency = "PT5M"  # Every 5 minutes
-  window_duration      = "PT15M" # 15-minute window
-  severity             = 2        # Warning level
-
-  criteria {
-    operator       = "GreaterThan"
-    threshold      = 80.0
-    time_aggregation_method = "Average"
-
-    failing_periods {
-      minimum_failing_periods_to_trigger_alert = 1
-      number_of_evaluation_periods              = 1
-    }
-
-    dimension {
-      name     = "Computer"
-      operator = "Include"
-      values   = ["*"]
-    }
-
-    query = <<-QUERY
-      Perf
-      | where ObjectName == "Processor" and CounterName == "% Processor Time"
-      | where InstanceName == "_Total"
-      | summarize AvgCPU = avg(CounterValue) by Computer
-      | where AvgCPU > 80
-    QUERY
-  }
-
-  scopes = [azurerm_log_analytics_workspace.baseline.id]
-
-  action {
-    action_group_ids = [azurerm_monitor_action_group.app_alerts[0].id]
-  }
-
-  description = "Triggers alert when average CPU exceeds 80% for ${var.app_code}"
-
-  depends_on = [azurerm_monitor_action_group.app_alerts]
-}
-
-# COST OPTIMIZATION: Storage account full alert is commented
-# WHY: Useful for long-term archival, but basic subscriptions may not need
-# COST: FREE alert rule
+# # resource "azurerm_monitor_scheduled_query_rules_alert_v2" "high_cpu" {
+# #   count = var.enable_monitoring ? 1 : 0
+# # 
+# count = var.enable_monitoring ? 1 : 0
+# resource "azurerm_monitor_scheduled_query_rules_alert_v2" "high_cpu" {
+# #   name                = "alert-high-cpu-${var.app_code}"
+#   resource_group_name = azurerm_resource_group.baseline.name
+#   location            = var.location
+# 
+#   evaluation_frequency = "PT5M"  # Every 5 minutes
+#   window_duration      = "PT15M" # 15-minute window
+#   severity             = 2        # Warning level
+# 
+#   criteria {
+#     operator       = "GreaterThan"
+#     threshold      = 80.0
+#     time_aggregation_method = "Average"
+# 
+#     failing_periods {
+#       minimum_failing_periods_to_trigger_alert = 1
+#       number_of_evaluation_periods              = 1
+#     }
+# 
+#     dimension {
+#       name     = "Computer"
+#       operator = "Include"
+#       values   = ["*"]
+#     }
+# 
+#     query = <<-QUERY
+#       Perf
+#       | where ObjectName == "Processor" and CounterName == "% Processor Time"
+#       | where InstanceName == "_Total"
+#       | summarize AvgCPU = avg(CounterValue) by Computer
+#       | where AvgCPU > 80
+#     QUERY
+#   }
+# 
+#   scopes = [azurerm_log_analytics_workspace.baseline.id]
+# 
+#   # action_group_ids moved to top level
+#   action_group_ids = [azurerm_monitor_action_group.app_alerts[0].id]
+#     action_group_ids = [azurerm_monitor_action_group.app_alerts[0].id]
+# 
+#   description = "Triggers alert when average CPU exceeds 80% for ${var.app_code}"
+# 
+#   depends_on = [azurerm_monitor_action_group.app_alerts]
+# }
+# 
+# # COST OPTIMIZATION: Storage account full alert is commented
+# # WHY: Useful for long-term archival, but basic subscriptions may not need
+# # COST: FREE alert rule
 #
 # Uncomment to monitor for storage capacity issues
 #
