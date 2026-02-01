@@ -51,11 +51,14 @@ locals {
   # - If use_existing_subscription=false: use the newly created subscription (requires valid billing_scope_id and permissions)
   # This design allows the same factory to work with both automatic creation (EA/MCA) and existing subscriptions (Pay-As-You-Go)
   subscription_id = var.use_existing_subscription ? var.existing_subscription_id : azurerm_subscription.this[0].subscription_id
+  
+  # Full subscription ID path required by management group association
+  subscription_id_path = "/subscriptions/${local.subscription_id}"
 }
 
 resource "azurerm_management_group_subscription_association" "mg" {
   management_group_id = var.management_group_id
-  subscription_id     = local.subscription_id
+  subscription_id     = local.subscription_id_path
 }
 
 resource "azurerm_role_assignment" "owners" {
