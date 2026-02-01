@@ -11,7 +11,7 @@ output "subscription_name" {
   # For created subscriptions: returns the resource-generated name
   # For existing subscriptions: returns the subscription_name provided in variables
   # (Note: azurerm doesn't have subscription.name property, so we use input variable for existing subscriptions)
-  value = var.use_existing_subscription ? var.subscription_name : azurerm_subscription.this[0].subscription_name
+  value = try(azurerm_subscription.this[0].subscription_name, var.subscription_name)
 }
 
 output "resource_group_name" {

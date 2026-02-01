@@ -27,26 +27,29 @@
 # 1. Verify billing account type: az billing account show --name "{accountId}"
 # 2. For MCA: Assign SP role at invoice section (see RBAC steps above)
 # 3. For EA: Get enrollment account and assign SP as subscription creator
-# 4. UNCOMMENT the code below and set use_existing_subscription = false
+# 4. Set use_existing_subscription = false and provide billing_scope_id
 # ============================================================================
 
-# ============================================================================
-# COMMENTED OUT: Automatic subscription creation (uncomment for EA/MCA accounts)
-# ============================================================================
-# resource "azurerm_subscription" "this" {
-#   count = var.use_existing_subscription ? 0 : 1
-#
-#   subscription_name = var.subscription_name
-#   billing_scope_id  = var.billing_scope_id
-#   
-#   # This resource requires:
-#   # - Valid billing_scope_id (EA enrollment or MCA invoice section)
-#   # - Service Principal with subscription creation permissions at billing scope
-#   # - Will fail with "InsufficientPermissionsOnInvoiceSection" error if permissions missing
-# }
+# Create new subscription only for EA/MCA accounts with proper billing permissions
+# For Pay-As-You-Go: Set use_existing_subscription = true and skip this resource
+resource "azurerm_subscription" "this" {
+  count = var.use_existing_subscription ? 0 : 1
+
+  subscription_name = var.subscription_name
+  billing_scope_id  = var.billing_scope_id
+  
+  # This resource requires:
+  # - Valid billing_scope_id (EA enrollment or MCA invoice section)
+  # - Service Principal with subscription creation permissions at billing scope
+  # - Will fail with "InsufficientPermissionsOnInvoiceSection" error if permissions missing
+}
 
 # Use existing subscription if provided (for Pay-As-You-Go or manual subscription management)
 locals {
+  # Intelligent subscription ID selection:
+  # - If use_existing_subscription=true: use the provided existing subscription ID
+  # - If use_existing_subscription=false: use the newly created subscription (requires valid billing_scope_id and permissions)
+  # This design allows the same factory to work with both automatic creation (EA/MCA) and existing subscriptions (Pay-As-You-Go)
   subscription_id = var.use_existing_subscription ? var.existing_subscription_id : azurerm_subscription.this[0].subscription_id
 }
 
