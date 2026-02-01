@@ -37,6 +37,12 @@ variable "billing_scope_id" {
   type        = string
 }
 
+variable "subscription_id_override" {
+  description = "Existing subscription ID to use for the subscription-scoped provider during planning or a second apply"
+  type        = string
+  default     = null
+}
+
 variable "owners" {
   description = "List of principal IDs to assign as subscription owners and app MG owners"
   type        = list(string)

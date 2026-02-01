@@ -23,7 +23,7 @@ provider "azuread" {
 # Provider for the newly created subscription
 provider "azurerm" {
   alias           = "subscription"
-  subscription_id = module.subscription.subscription_id
+  subscription_id = coalesce(var.subscription_id_override, data.azurerm_client_config.current.subscription_id)
   features {}
   use_oidc = true
 }

@@ -20,13 +20,10 @@ module "app_management_group" {
   source = "git::https://github.com/seera-eswara/terraform-azure-modules.git//modules/app-management-group?ref=main"
 
   app_code                   = var.app_code
-  parent_management_group_id = data.azurerm_management_group.applications.id
+  parent_management_group_id = data.terraform_remote_state.landing_zone.outputs.applications_mg_id
 
   app_owners       = var.owners  # App team owners assigned to app MG
   app_contributors = var.app_contributors
-
-  # Ensure this happens before subscription creation
-  depends_on = [data.azurerm_management_group.applications]
 }
 
 module "subscription" {

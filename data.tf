@@ -9,15 +9,8 @@ data "terraform_remote_state" "landing_zone" {
     key                  = "landingzone.tfstate"
   }
 }
-# Before (broken - relies on missing remote state output)
-#data "azurerm_management_group" "applications" {
-#  name = data.terraform_remote_state.landing_zone.outputs.applications_mg_id
-#}
 
-# Get Applications MG directly (not dependent on remote state output)
-data "azurerm_management_group" "applications" {
-  name = "applications"
-}
+data "azurerm_client_config" "current" {}
 
 # Try to resolve app-specific management group
 # If it doesn't exist, the module below will create it
