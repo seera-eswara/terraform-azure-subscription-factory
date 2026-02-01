@@ -1,14 +1,15 @@
 # Apply policies to new subscriptions created by the factory
 # Policies are inherited from parent management group
 # This file handles additional app-specific policy assignments
+# NOTE: Policies temporarily disabled - add them back once policy definitions are created
 
-data "azurerm_policy_definition" "allowed_regions" {
-  name = "allowed-regions"
-}
+# data "azurerm_policy_definition" "allowed_regions" {
+#   name = "allowed-regions"
+# }
 
-data "azurerm_policy_definition" "require_tags" {
-  name = "require-tags"
-}
+# data "azurerm_policy_definition" "require_tags" {
+#   name = "require-tags"
+# }
 
 # Assign allowed regions policy to new app subscriptions
 # This ensures apps can only deploy to approved regions

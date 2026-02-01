@@ -1,17 +1,25 @@
+# Create new subscription only if not using existing one
 resource "azurerm_subscription" "this" {
+  count = var.use_existing_subscription ? 0 : 1
+
   subscription_name = var.subscription_name
   billing_scope_id  = var.billing_scope_id
 }
 
+# Use existing subscription if provided
+locals {
+  subscription_id = var.use_existing_subscription ? var.existing_subscription_id : azurerm_subscription.this[0].subscription_id
+}
+
 resource "azurerm_management_group_subscription_association" "mg" {
   management_group_id = var.management_group_id
-  subscription_id     = azurerm_subscription.this.subscription_id
+  subscription_id     = local.subscription_id
 }
 
 resource "azurerm_role_assignment" "owners" {
   for_each = toset(var.owners)
 
-  scope                = azurerm_subscription.this.subscription_id
+  scope                = "/subscriptions/${local.subscription_id}"
   role_definition_name = "Owner"
   principal_id         = each.value
 }
