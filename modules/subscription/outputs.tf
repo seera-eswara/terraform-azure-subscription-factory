@@ -1,11 +1,17 @@
 output "subscription_id" {
-  description = "The ID of the created subscription"
-  value       = azurerm_subscription.this.subscription_id
+  description = "The ID of the created or managed subscription"
+  # Returns subscription_id from either:
+  # - Newly created subscription (azurerm_subscription.this[0].subscription_id) when use_existing_subscription=false
+  # - Existing subscription (var.existing_subscription_id) when use_existing_subscription=true
+  value = local.subscription_id
 }
 
 output "subscription_name" {
-  description = "The name of the created subscription"
-  value       = azurerm_subscription.this.subscription_name
+  description = "The name of the subscription"
+  # For created subscriptions: returns the resource-generated name
+  # For existing subscriptions: returns the subscription_name provided in variables
+  # (Note: azurerm doesn't have subscription.name property, so we use input variable for existing subscriptions)
+  value = var.use_existing_subscription ? var.subscription_name : azurerm_subscription.this[0].subscription_name
 }
 
 output "resource_group_name" {

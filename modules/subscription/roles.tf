@@ -25,17 +25,25 @@ data "azurerm_role_definition" "reader" {
 }
 
 # Assign Contributor to app groups at subscription scope
+# scope must be the full subscription path for role assignments to work correctly
+# Using local.subscription_id which handles both:
+# - New subscriptions created via azurerm_subscription resource
+# - Existing subscriptions passed via subscription_id_override variable
 resource "azurerm_role_assignment" "app_contributor" {
   for_each           = data.azuread_group.app_contributor
-  scope              = azurerm_subscription.this.subscription_id
+  scope              = "/subscriptions/${local.subscription_id}"
   role_definition_id = data.azurerm_role_definition.contributor.id
   principal_id       = each.value.id
 }
 
 # Assign Reader to FinOps groups at subscription scope
+# scope must be the full subscription path for role assignments to work correctly
+# Using local.subscription_id which handles both:
+# - New subscriptions created via azurerm_subscription resource
+# - Existing subscriptions passed via subscription_id_override variable
 resource "azurerm_role_assignment" "finops_reader" {
   for_each           = data.azuread_group.reader
-  scope              = azurerm_subscription.this.subscription_id
+  scope              = "/subscriptions/${local.subscription_id}"
   role_definition_id = data.azurerm_role_definition.reader.id
   principal_id       = each.value.id
 }

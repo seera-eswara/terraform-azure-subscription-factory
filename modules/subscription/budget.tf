@@ -1,8 +1,19 @@
 resource "azurerm_consumption_budget_subscription" "monthly" {
   count = var.monthly_budget > 0 ? 1 : 0
 
-  name            = "monthly-budget"
-  subscription_id = azurerm_subscription.this.subscription_id
+  name = "monthly-budget"
+  # Using local.subscription_id which intelligently handles both scenarios:
+  # Scenario 1: Automatic subscription creation (EA/MCA accounts)
+  #   - When use_existing_subscription = false
+  #   - Creates new subscription via azurerm_subscription.this[0]
+  #   - Requires: billing_scope_id + proper RBAC permissions
+  # Scenario 2: Existing subscription management (Pay-As-You-Go accounts)
+  #   - When use_existing_subscription = true
+  #   - Uses existing_subscription_id provided in variables
+  #   - No subscription creation permissions required
+  # See main.tf for the full logic determining which path is taken
+  #subscription_id = azurerm_subscription.this.subscription_id
+  subscription_id = local.subscription_id
 
   amount     = var.monthly_budget
   time_grain = "Monthly"
