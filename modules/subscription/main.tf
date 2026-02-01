@@ -1,12 +1,50 @@
-# Create new subscription only if not using existing one
+# ============================================================================
+# SUBSCRIPTION CREATION - EDUCATIONAL NOTES
+# ============================================================================
+# Azure supports programmatic subscription creation ONLY for these billing types:
+# 
+# 1. Enterprise Agreement (EA):
+#    - Requires EA Enrollment Account enrollment/xxx
+#    - Service Principal needs "Enrollment Account Subscription Creator" role
+#    - billing_scope_id format: /providers/Microsoft.Billing/billingAccounts/{accountId}/enrollmentAccounts/{enrollmentId}
+#
+# 2. Microsoft Customer Agreement (MCA):
+#    - Requires invoice sections under billing profiles
+#    - Service Principal needs "Invoice Section Contributor" or "Billing Profile Contributor" role
+#    - billing_scope_id format: /providers/Microsoft.Billing/billingAccounts/{accountId}/billingProfiles/{profileId}/invoiceSections/{sectionId}
+#    - Assignment done via: Azure Portal -> Cost Management + Billing -> Invoice sections -> Access Control (IAM)
+#
+# 3. Microsoft Partner Agreement (MPA):
+#    - For CSP partners managing customer subscriptions
+#    - Requires partner-level billing access
+#
+# ❌ NOT SUPPORTED: Pay-As-You-Go, Free Trial, MSDN/Visual Studio subscriptions
+#    - These account types CANNOT create subscriptions programmatically
+#    - Must manually create subscriptions in Azure Portal
+#    - Use subscription_id_override to manage existing subscriptions
+#
+# To enable automatic subscription creation:
+# 1. Verify billing account type: az billing account show --name "{accountId}"
+# 2. For MCA: Assign SP role at invoice section (see RBAC steps above)
+# 3. For EA: Get enrollment account and assign SP as subscription creator
+# 4. Set use_existing_subscription = false and provide billing_scope_id
+# ============================================================================
+
+# Create new subscription only for EA/MCA accounts with proper billing permissions
+# For Pay-As-You-Go: Set use_existing_subscription = true and skip this resource
 resource "azurerm_subscription" "this" {
   count = var.use_existing_subscription ? 0 : 1
 
   subscription_name = var.subscription_name
   billing_scope_id  = var.billing_scope_id
+  
+  # This resource requires:
+  # - Valid billing_scope_id (EA enrollment or MCA invoice section)
+  # - Service Principal with subscription creation permissions at billing scope
+  # - Will fail with "InsufficientPermissionsOnInvoiceSection" error if permissions missing
 }
 
-# Use existing subscription if provided
+# Use existing subscription if provided (for Pay-As-You-Go or manual subscription management)
 locals {
   subscription_id = var.use_existing_subscription ? var.existing_subscription_id : azurerm_subscription.this[0].subscription_id
 }

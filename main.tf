@@ -79,6 +79,10 @@ module "subscription" {
   create_policy_assignments = var.create_policy_assignments
   allowed_regions           = var.allowed_regions
   required_tags             = var.required_tags
+  
+  # Existing subscription (for Pay-As-You-Go accounts)
+  use_existing_subscription = var.subscription_id_override != null ? true : false
+  existing_subscription_id  = var.subscription_id_override
 
   # RBAC group bindings
   app_contributor_groups  = var.app_contributor_groups

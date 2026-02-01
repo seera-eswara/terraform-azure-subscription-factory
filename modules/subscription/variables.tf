@@ -99,6 +99,34 @@ variable "required_tags" {
   default     = ["Environment", "CostCenter", "Owner"]
 }
 
+# ============================================================================
+# EXISTING SUBSCRIPTION MANAGEMENT (for Pay-As-You-Go accounts)
+# ============================================================================
+# Pay-As-You-Go and Free Trial accounts cannot create subscriptions via API.
+# Instead, manually create subscriptions in Azure Portal, then use this factory to:
+# - Associate subscription with management groups
+# - Create baseline infrastructure (resource groups, networking, monitoring)
+# - Apply RBAC and policies
+# - Set up budgets and alerts
+# ============================================================================
+
+variable "use_existing_subscription" {
+  description = "Use an existing subscription instead of creating a new one (required for Pay-As-You-Go accounts)"
+  type        = bool
+  default     = false
+}
+
+variable "existing_subscription_id" {
+  description = "Existing subscription ID to use when use_existing_subscription is true"
+  type        = string
+  default     = null
+  
+  # Usage: 
+  # 1. Manually create subscription in Azure Portal
+  # 2. Get subscription ID: az account list --query "[].id" -o tsv
+  # 3. Set subscription_id_override in terraform.tfvars
+}
+
 variable "billing_entity" {
   description = "Billing entity or cost center for resource tagging"
   type        = string

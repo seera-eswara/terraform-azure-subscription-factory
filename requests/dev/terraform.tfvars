@@ -1,5 +1,7 @@
-app_code                 = "rff"
-environment              = "dev"
-module                   = "react"
-billing_scope_id         = "/providers/Microsoft.Billing/billingAccounts/f7a29849-433a-57be-fbe2-026e3d9b5498:852d7d1e-bb14-4166-a582-fe7d85bd933c_2019-05-31/billingProfiles/TKRR-YOP4-BG7-PGB/invoiceSections/4ba6553e-0eb5-43be-aee9-7ff77d373408"
-subscription_id_override = "5d8deb1d-5156-4dd3-8d72-5cbedd3f7f46"
+app_code         = "rff"
+environment      = "dev"
+module           = "react"
+billing_scope_id = "dummy" # Not needed for Pay-As-You-Go - using existing subscription
+
+# Use existing subscription (Pay-As-You-Go cannot create new subscriptions programmatically)
+subscription_id_override = "1ad0a757-3e55-4a07-9f24-8aedfe6a5115"
