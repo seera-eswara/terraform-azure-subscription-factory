@@ -3,14 +3,18 @@ data "terraform_remote_state" "landing_zone" {
   backend = "azurerm"
 
   config = {
-    resource_group_name  = var.landingzone_state_resource_group
-    storage_account_name = var.landingzone_state_storage_account
-    container_name       = var.landingzone_state_container
-    key                  = var.landingzone_state_key
+    resource_group_name  = "rg-tfstate"
+    storage_account_name = "tfstatelzqiaypb"
+    container_name       = "tfstate"
+    key                  = "landingzone.tfstate"
   }
 }
+# Before (broken - relies on missing remote state output)
+#data "azurerm_management_group" "applications" {
+#  name = data.terraform_remote_state.landing_zone.outputs.applications_mg_id
+#}
 
-# Get Applications MG from landing zone to use as parent for app MGs
+# Get Applications MG directly (not dependent on remote state output)
 data "azurerm_management_group" "applications" {
   name = "applications"
 }
