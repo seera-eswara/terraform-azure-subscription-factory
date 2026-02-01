@@ -11,9 +11,17 @@ terraform {
   }
 }
 
+# Get current Azure CLI context
+data "azurerm_client_config" "current" {}
+
 provider "azurerm" {
   features {}
   use_oidc = true
+  # Dynamically uses the active subscription from Azure CLI context
+  # This is typically where the Terraform state backend is stored (cloud-infra-sub)
+  # No need to hardcode - just set the right subscription with: az account set --subscription <id>
+  # Falls back to backend_subscription_id variable if you need to override
+  subscription_id = var.backend_subscription_id != null ? var.backend_subscription_id : data.azurerm_client_config.current.subscription_id
 }
 
 provider "azuread" {

@@ -37,6 +37,12 @@ variable "billing_scope_id" {
   type        = string
 }
 
+variable "backend_subscription_id" {
+  description = "Subscription ID where Terraform state backend is stored. If not provided, uses the active Azure CLI subscription context."
+  type        = string
+  default     = null
+}
+
 variable "subscription_id_override" {
   description = "Existing subscription ID to use for the subscription-scoped provider during planning or a second apply"
   type        = string
