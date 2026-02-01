@@ -8,7 +8,7 @@
 *.tfvars
 *.tfvars.json
 # Exception: allow dev.tfvars files in requests folders
-!requests/*/dev.tfvars
+!requests/*/terraform.tfvars
 
 # Override files
 override.tf
