@@ -11,9 +11,6 @@ terraform {
   }
 }
 
-# Get current Azure CLI context
-data "azurerm_client_config" "current" {}
-
 provider "azurerm" {
   features {}
   use_oidc = true
