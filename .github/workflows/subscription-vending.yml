@@ -78,19 +78,18 @@ jobs:
     # environment: prod
     # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.INFRA_SUBSCRIPTION_ID }}
+      ARM_USE_OIDC: true
+    
     steps:
       - uses: actions/checkout@v4
 
       - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.6
-
-      - name: Azure Login (OIDC)
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.INFRA_SUBSCRIPTION_ID }}
 
       - name: Terraform Init
         run: terraform init
