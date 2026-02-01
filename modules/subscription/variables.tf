@@ -99,6 +99,12 @@ variable "required_tags" {
   default     = ["Environment", "CostCenter", "Owner"]
 }
 
+variable "billing_entity" {
+  description = "Billing entity or cost center for resource tagging"
+  type        = string
+  default     = "shared"
+}
+
 # RBAC group display names
 variable "app_contributor_groups" {
   description = "Azure AD group display names to grant Contributor at subscription scope"

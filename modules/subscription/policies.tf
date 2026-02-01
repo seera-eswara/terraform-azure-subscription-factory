@@ -17,7 +17,7 @@ resource "azurerm_management_group_policy_assignment" "app_allowed_regions" {
 
   name                 = "${var.app_code}-allowed-regions"
   policy_definition_id = data.azurerm_policy_definition.allowed_regions.id
-  management_group_id  = data.azurerm_management_group.app.id
+  management_group_id  = var.management_group_id
 
   parameters = jsonencode({
     allowedLocations = {
@@ -36,7 +36,7 @@ resource "azurerm_management_group_policy_assignment" "app_require_tags" {
 
   name                 = "${var.app_code}-require-tags"
   policy_definition_id = data.azurerm_policy_definition.require_tags.id
-  management_group_id  = data.azurerm_management_group.app.id
+  management_group_id  = var.management_group_id
 
   parameters = jsonencode({
     requiredTags = {

@@ -31,13 +31,9 @@ resource "azurerm_monitor_action_group" "app_alerts" {
   )
 }
 
-# Email notifications to app owners
-resource "azurerm_monitor_action_group_email_receiver" "app_owners" {
-  count = var.enable_monitoring && length(var.alert_email_addresses) > 0 ? 1 : 0
-
-  action_group_name       = azurerm_monitor_action_group.app_alerts[0].name
-  name                    = "email-app-owners"
-  email_address           = var.alert_email_addresses[0]
+# Email receivers are configured inline within the action group resource
+# The azurerm_monitor_action_group_email_receiver resource type is not supported
+# Use email_receiver blocks within azurerm_monitor_action_group instead
   use_common_alert_schema = true
 }
 

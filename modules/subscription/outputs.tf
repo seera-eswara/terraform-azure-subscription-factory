@@ -28,10 +28,7 @@ output "log_analytics_workspace_name" {
   value       = azurerm_log_analytics_workspace.baseline.name
 }
 
-output "ddos_protection_plan_id" {
-  description = "The DDoS Protection Plan ID"
-  value       = try(azurerm_network_ddos_protection_plan.baseline[0].id, null)
-}
+# DDoS Protection Plan output removed - not created when enable_ddos_protection = false
 
 output "app_contributor_assignment_ids" {
   description = "Role assignment IDs for app Contributor groups"
