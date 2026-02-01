@@ -75,7 +75,7 @@ jobs:
     name: Provision Subscription
     # needs: validate
     runs-on: ubuntu-latest
-    environment: prod
+    # environment: prod
     # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     
     steps:
